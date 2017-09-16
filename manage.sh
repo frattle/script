@@ -11,10 +11,10 @@ elif [[ $# -ne 0 ]]; then
   exit 1
 fi
 
-kernel_suffix=oreo-r3
-branch=oreo-r3-release
-aosp_version=OPR3.170623.013
-aosp_tag=android-8.0.0_r30
+kernel_suffix=oreo-dr1
+branch=oreo-dr1-release
+aosp_version=OPD1.170816.025
+aosp_tag=android-8.0.0_r33
 
 aosp_forks=(
   device_common
@@ -61,6 +61,22 @@ aosp_forks=(
   platform_system_extras
   platform_system_netd
   platform_system_sepolicy
+)
+
+skip_repos=(
+  device_linaro_hikey # automatically ported + backported fixes
+  platform_bionic # ported + added workaround
+  platform_bootable_recovery # ported
+  platform_build # ported
+  platform_build_soong # ported
+  platform_external_svox # ported
+  platform_external_sqlite # ported
+  platform_frameworks_base # ported + backported fix
+  platform_frameworks_native # automatically ported + backported fixes
+  platform_packages_apps_Bluetooth # ported
+  platform_packages_apps_Settings # ported
+  platform_prebuilts_clang_host_linux-x86 # ported
+  platform_system_sepolicy # ported
 )
 
 declare -A kernels=(
@@ -116,11 +132,24 @@ for repo in "${aosp_forks[@]}"; do
       git checkout $branch || exit 1
       git branch -D tmp || exit 1
     fi
-  else
-    git fetch upstream --tags || exit 1
-
-    git pull --rebase upstream $aosp_tag || exit 1
-    git push -f || exit 1
+  elif [[ $repo != platform_manifest ]]; then
+    skip=false
+    for skip_repo in "${skip_repos[@]}"; do
+      if [[ $skip_repo == $repo ]]; then
+        skip=true
+        break
+      fi
+    done
+    if [[ $skip == false ]]; then
+      git checkout $aosp_tag || exit 1
+      git cherry-pick upstream/oreo-r3-release..oreo-r3-release
+      git checkout -B $branch || exit 1
+      git push -f -u origin $branch || exit 1
+    else
+      git fetch upstream --tags || exit 1
+      git pull --rebase upstream $aosp_tag || exit 1
+      git push -f || exit 1
+    fi
   fi
 
   cd .. || exit 1
@@ -143,15 +172,9 @@ for kernel in ${!kernels[@]}; do
     git tag -s $aosp_version.$build_number -m $aosp_version.$build_number || exit 1
     git push origin $aosp_version.$build_number || exit 1
   else
-    git fetch upstream --tags || exit 1
-    suffix=$kernel_suffix
-    if [[ $kernel == huawei_angler || $kernel == lge_bullhead ]]; then
-      suffix=oreo-r6
-    elif [[ $kernel == linaro_hikey ]]; then
-      suffix=android-8.0.0_r4
-    fi
-    git pull --rebase upstream ${kernels[$kernel]}-$suffix || exit 1
-    git push -f || exit 1
+    git checkout oreo-r3-release || exit 1
+    git checkout -B $branch || exit 1
+    git push -f -u origin $branch || exit 1
   fi
 
   cd .. || exit 1
@@ -173,8 +196,10 @@ for repo in ${copperhead[@]}; do
   if [[ -n $build_number ]]; then
     git tag -s $aosp_version.$build_number -m $aosp_version.$build_number || exit 1
     git push origin $aosp_version.$build_number || exit 1
-  else
-    git push -f || exit 1
+  elif [[ $repo != script ]]; then
+    git checkout oreo-r3-release || exit 1
+    git checkout -B $branch || exit 1
+    git push -f -u origin $branch || exit 1
   fi
 
   cd .. || exit 1
