@@ -11,10 +11,10 @@ elif [[ $# -ne 0 ]]; then
   exit 1
 fi
 
-kernel_suffix=oreo-r3
-branch=oreo-r3-release
-aosp_version=OPR3.170623.007
-aosp_tag=android-8.0.0_r9
+kernel_suffix=oreo-r4
+branch=oreo-r4-release
+aosp_version=OPR4.170623.006
+aosp_tag=android-8.0.0_r10
 
 aosp_forks=(
   device_common
@@ -119,11 +119,11 @@ for repo in "${aosp_forks[@]}"; do
       git checkout $branch || exit 1
       git branch -D tmp || exit 1
     fi
-  else
-    git fetch upstream --tags || exit 1
-
-    git pull --rebase upstream $aosp_tag || exit 1
-    git push -f || exit 1
+  elif [[ $repo != platform_manifest ]]; then
+    git checkout upstream/oreo-r4-release || exit 1
+    git cherry-pick upstream/oreo-r3-release..oreo-r3-release
+    git checkout -B oreo-r4-release || exit 1
+    git push -f -u origin oreo-r4-release || exit 1
   fi
 
   cd .. || exit 1
@@ -146,17 +146,9 @@ for kernel in ${!kernels[@]}; do
     git tag -s $aosp_version.$build_number -m $aosp_version.$build_number || exit 1
     git push origin $aosp_version.$build_number || exit 1
   else
-    git fetch upstream --tags || exit 1
-    suffix=$kernel_suffix
-    if [[ $kernel == lge_bullhead ]]; then
-      suffix=oreo-r4
-    elif [[ $kernel == huawei_angler ]]; then
-      suffix=oreo-r6
-    elif [[ $kernel == linaro_hikey ]]; then
-      suffix=android-8.0.0_r4
-    fi
-    git pull --rebase upstream ${kernels[$kernel]}-$suffix || exit 1
-    git push -f || exit 1
+    git checkout oreo-r3-release || exit 1
+    git checkout -B oreo-r4-release || exit 1
+    git push -f -u origin oreo-r4-release || exit 1
   fi
 
   cd .. || exit 1
@@ -178,8 +170,10 @@ for repo in ${copperhead[@]}; do
   if [[ -n $build_number ]]; then
     git tag -s $aosp_version.$build_number -m $aosp_version.$build_number || exit 1
     git push origin $aosp_version.$build_number || exit 1
-  else
-    git push -f || exit 1
+  elif [[ $repo != script ]]; then
+    git checkout oreo-r3-release || exit 1
+    git checkout -B oreo-r4-release || exit 1
+    git push -f -u origin oreo-r4-release || exit 1
   fi
 
   cd .. || exit 1
