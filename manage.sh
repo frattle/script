@@ -64,6 +64,22 @@ aosp_forks=(
   platform_system_sepolicy
 )
 
+skip_repos=(
+  device_linaro_hikey # automatically ported + backported fixes
+  platform_bionic # ported + added workaround
+  platform_bootable_recovery # ported
+  platform_build # ported + workaround for platform_prebuilts_clang_host_linux-x86 not being ported
+  platform_build_soong # ported + workaround for platform_prebuilts_clang_host_linux-x86 not being ported
+  platform_external_svox # ported
+  platform_external_sqlite # ported
+  platform_frameworks_base # ported + backported fix
+  platform_frameworks_native # automatically ported + backported fixes
+  platform_packages_apps_Bluetooth # ported
+  platform_packages_apps_Settings # ported
+  platform_prebuilts_clang_host_linux-x86
+  platform_system_sepolicy # ported
+)
+
 declare -A kernels=(
   [google_marlin]=android-msm-marlin-3.18
   [huawei_angler]=android-msm-angler-3.10
@@ -118,10 +134,19 @@ for repo in "${aosp_forks[@]}"; do
       git branch -D tmp || exit 1
     fi
   elif [[ $repo != platform_manifest ]]; then
-    git checkout $aosp_tag || exit 1
-    git cherry-pick upstream/oreo-r3-release..oreo-r3-release
-    git checkout -B $branch || exit 1
-    git push -f -u origin $branch || exit 1
+    skip=false
+    for skip_repo in "${skip_repos[@]}"; do
+      if [[ $skip_repo == $repo ]]; then
+        skip=true
+        break
+      fi
+    done
+    if [[ $skip == false ]]; then
+      git checkout $aosp_tag || exit 1
+      git cherry-pick upstream/oreo-r3-release..oreo-r3-release
+      git checkout -B $branch || exit 1
+      git push -f -u origin $branch || exit 1
+    fi
   fi
 
   cd .. || exit 1
