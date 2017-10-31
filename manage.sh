@@ -31,7 +31,6 @@ aosp_forks=(
   platform_external_clang
   platform_external_conscrypt
   platform_external_llvm
-  platform_external_nanopb-c
   platform_external_svox
   platform_external_sqlite
   platform_external_wpa_supplicant_8
