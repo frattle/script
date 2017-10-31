@@ -34,7 +34,6 @@ aosp_forks=(
   platform_external_nanopb-c
   platform_external_svox
   platform_external_sqlite
-  platform_external_v8
   platform_external_wpa_supplicant_8
   platform_frameworks_av
   platform_frameworks_base
