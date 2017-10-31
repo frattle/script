@@ -21,7 +21,6 @@ aosp_forks=(
   device_google_marlin
   device_huawei_angler
   device_lge_bullhead
-  device_linaro_hikey
   platform_art
   platform_bionic
   platform_bootable_recovery
