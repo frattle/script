@@ -13,8 +13,8 @@ fi
 
 kernel_suffix=oreo-r5
 branch=oreo-r5-release
-aosp_version=OPR5.170623.007
-aosp_tag=android-8.0.0_r17
+aosp_version=OPR5.170623.011
+aosp_tag=android-8.0.0_r31
 
 aosp_forks=(
   device_common
