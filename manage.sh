@@ -146,10 +146,8 @@ for kernel in ${!kernels[@]}; do
   else
     git fetch upstream --tags || exit 1
     suffix=$kernel_suffix
-    if [[ $kernel == lge_bullhead ]]; then
-      suffix=oreo-r4
-    elif [[ $kernel == huawei_angler ]]; then
-      suffix=oreo-r5
+    if [[ $kernel == huawei_angler || $kernel == lge_bullhead ]]; then
+      suffix=oreo-r6
     elif [[ $kernel == linaro_hikey ]]; then
       suffix=android-8.0.0_r4
     fi
