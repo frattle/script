@@ -19,6 +19,9 @@ aosp_tag=android-8.1.0_r1
 aosp_forks=(
   device_common
   device_google_marlin
+  device_google_muskie
+  device_google_taimen
+  device_google_wahoo
   device_huawei_angler
   device_lge_bullhead
   device_linaro_hikey
@@ -64,6 +67,7 @@ aosp_forks=(
 
 declare -A kernels=(
   [google_marlin]=android-msm-marlin-3.18
+  [google_wahoo]=android-msm-wahoo-4.4
   [huawei_angler]=android-msm-angler-3.10
   [lge_bullhead]=android-msm-bullhead-3.10
   [linaro_hikey]=hikey-4.9
