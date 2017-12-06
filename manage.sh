@@ -148,9 +148,7 @@ for kernel in ${!kernels[@]}; do
   else
     git fetch upstream --tags || exit 1
     suffix=$kernel_suffix
-    if [[ $kernel == huawei_angler || $kernel == lge_bullhead ]]; then
-      suffix=oreo-r6
-    elif [[ $kernel == linaro_hikey ]]; then
+    if [[ $kernel == linaro_hikey ]]; then
       suffix=android-8.0.0_r4
     fi
     git pull --rebase upstream ${kernels[$kernel]}-$suffix || exit 1
