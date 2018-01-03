@@ -13,8 +13,8 @@ fi
 
 kernel_suffix=oreo-mr1
 branch=oreo-mr1-release
-aosp_version=OPM1.171019.011
-aosp_tag=android-8.1.0_r1
+aosp_version=OPM1.171019.012
+aosp_tag=android-8.1.0_r3
 
 aosp_forks=(
   device_common
