@@ -152,6 +152,8 @@ for kernel in ${!kernels[@]}; do
     suffix=$kernel_suffix
     if [[ $kernel == linaro_hikey ]]; then
       suffix=android-8.0.0_r4
+    elif [[ $kernel == huawei_angler || $kernel == lge_bullhead ]]; then
+      suffix=oreo-m3
     fi
     git pull --rebase upstream ${kernels[$kernel]}-$suffix || exit 1
     git push -f || exit 1
