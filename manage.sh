@@ -12,9 +12,10 @@ elif [[ $# -ne 0 ]]; then
 fi
 
 kernel_suffix=oreo-mr1
-branch=oreo-mr1-release
-aosp_version=OPM1.171019.012
-aosp_tag=android-8.1.0_r3
+branch=oreo-mr1-release-pixel-2
+main_branch=oreo-mr1-release
+aosp_version=OPM1.171019.013
+aosp_tag=android-8.1.0_r4
 
 aosp_forks=(
   device_common
@@ -99,7 +100,7 @@ for repo in "${aosp_forks[@]}"; do
 
   cd $repo || exit 1
 
-  git checkout $branch || exit 1
+  #git checkout $branch || exit 1
 
   if [[ -n $DELETE_TAG ]]; then
     git tag -d $DELETE_TAG
@@ -122,11 +123,11 @@ for repo in "${aosp_forks[@]}"; do
       git checkout $branch || exit 1
       git branch -D tmp || exit 1
     fi
-  else
-    git fetch upstream --tags || exit 1
-
-    git pull --rebase upstream $aosp_tag || exit 1
-    git push -f || exit 1
+  elif [[ $repo != platform_manifest ]]; then
+    git checkout $aosp_tag || exit 1
+    git cherry-pick upstream/oreo-mr1-release..oreo-mr1-release
+    git checkout -B $branch || exit 1
+    git push -f -u origin $branch || exit 1
   fi
 
   cd .. || exit 1
@@ -136,7 +137,7 @@ for kernel in ${!kernels[@]}; do
   echo -e "\n>>> $(tput setaf 3)Handling kernel_$kernel$(tput sgr0)"
 
   cd kernel_$kernel || exit 1
-  git checkout $branch || exit 1
+  #git checkout $branch || exit 1
 
   if [[ -n $DELETE_TAG ]]; then
     git tag -d $DELETE_TAG
@@ -149,15 +150,9 @@ for kernel in ${!kernels[@]}; do
     git tag -s $aosp_version.$build_number -m $aosp_version.$build_number || exit 1
     git push origin $aosp_version.$build_number || exit 1
   else
-    git fetch upstream --tags || exit 1
-    suffix=$kernel_suffix
-    if [[ $kernel == linaro_hikey ]]; then
-      suffix=android-8.0.0_r4
-    elif [[ $kernel == huawei_angler || $kernel == lge_bullhead ]]; then
-      suffix=oreo-m3
-    fi
-    git pull --rebase upstream ${kernels[$kernel]}-$suffix || exit 1
-    git push -f || exit 1
+    git checkout oreo-mr1-release || exit 1
+    git checkout -B $branch || exit 1
+    git push -f -u origin $branch || exit 1
   fi
 
   cd .. || exit 1
@@ -167,7 +162,7 @@ for repo in ${copperhead[@]}; do
   echo -e "\n>>> $(tput setaf 3)Handling $repo$(tput sgr0)"
 
   cd $repo || exit 1
-  git checkout $branch || exit 1
+  #git checkout $branch || exit 1
 
   if [[ -n $DELETE_TAG ]]; then
     git tag -d $DELETE_TAG
@@ -179,8 +174,10 @@ for repo in ${copperhead[@]}; do
   if [[ -n $build_number ]]; then
     git tag -s $aosp_version.$build_number -m $aosp_version.$build_number || exit 1
     git push origin $aosp_version.$build_number || exit 1
-  else
-    git push -f || exit 1
+  elif [[ $repo != script ]]; then
+    git checkout oreo-mr1-release || exit 1
+    git checkout -B $branch || exit 1
+    git push -f -u origin $branch || exit 1
   fi
 
   cd .. || exit 1
