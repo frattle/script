@@ -25,7 +25,7 @@ elif [[ $1 == angler ]]; then
   BOOTLOADER=$(get_radio_image bootloader huawei/$1)
   RADIO=$(get_radio_image baseband huawei/$1)
   PREFIX=aosp_
-elif [[ $1 == marlin || $1 == sailfish ]]; then
+elif [[ $1 == marlin || $1 == sailfish || $1 == taimen || $1 == walleye ]]; then
   BOOTLOADER=$(get_radio_image bootloader google_devices/$1)
   RADIO=$(get_radio_image baseband google_devices/$1)
   PREFIX=aosp_
