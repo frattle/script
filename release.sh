@@ -49,7 +49,7 @@ if [[ $DEVICE != hikey* ]]; then
     VERITY_SWITCHES=(--replace_verity_public_key "$KEY_DIR/verity_key.pub" --replace_verity_private_key "$KEY_DIR/verity"
                      --replace_verity_keyid "$KEY_DIR/verity.x509.pem")
   else
-    VERITY_SWITCHES=(--avb_vbmeta_key "$KEY_DIR/avb.x509.pem" --avb_vbmeta_algorithm SHA256_RSA2048)
+    VERITY_SWITCHES=(--avb_vbmeta_key "$KEY_DIR/avb.pem" --avb_vbmeta_algorithm SHA256_RSA2048)
   fi
 fi
 
