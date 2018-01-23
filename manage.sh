@@ -64,6 +64,7 @@ aosp_forks=(
   platform_system_extras
   platform_system_netd
   platform_system_sepolicy
+  platform_test_vts-testcase_kernel
 )
 
 declare -A kernels=(
