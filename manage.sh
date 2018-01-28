@@ -156,8 +156,16 @@ for kernel in ${!kernels[@]}; do
     elif [[ $kernel == huawei_angler || $kernel == lge_bullhead ]]; then
       suffix=oreo-m3
     fi
+    if [[ $kernel == google_wahoo ]]; then
+      git checkout $branch-stable-base || exit 1
+    fi
     git pull --rebase upstream ${kernels[$kernel]}-$suffix || exit 1
     git push -f || exit 1
+    if [[ $kernel == google_wahoo ]]; then
+      git checkout $branch || exit 1
+      git rebase $branch-stable-base || exit 1
+      git push -f || exit 1
+    fi
   fi
 
   cd .. || exit 1
