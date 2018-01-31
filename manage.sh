@@ -77,8 +77,8 @@ declare -A kernels=(
 
 copperhead=(
   android-prepare-vendor
+  branding
   chromium_patches
-  copperhead
   platform_external_chromium
   platform_external_chromium-webview
   platform_external_Etar-Calendar
