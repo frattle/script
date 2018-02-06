@@ -14,6 +14,7 @@ fi
 kernel_suffix=oreo-mr1
 branch=oreo-mr1-release
 aosp_version=OPM1.171019.019
+aosp_version_real=OPM1.171019.019
 aosp_tag=android-8.1.0_r12
 
 aosp_forks=(
@@ -113,6 +114,10 @@ for repo in "${aosp_forks[@]}"; do
       git checkout -B tmp || exit 1
       sed -i s%refs/heads/$branch%refs/tags/$aosp_version.$build_number% default.xml || exit 1
       git commit default.xml -m $aosp_version.$build_number || exit 1
+    elif [[ $aosp_version != $aosp_version_real && $repo == platform_build ]]; then
+      git checkout -B tmp || exit 1
+      sed -i s/$aosp_version_real/$aosp_version/ core/build_id.mk
+      git commit core/build_id.mk -m $aosp_version.$build_number || exit 1
     fi
 
     git tag -s $aosp_version.$build_number -m $aosp_version.$build_number || exit 1
