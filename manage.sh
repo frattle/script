@@ -11,11 +11,11 @@ elif [[ $# -ne 0 ]]; then
   exit 1
 fi
 
-kernel_suffix=oreo-mr1
-branch=oreo-mr1-release
-aosp_version=OPM1.171019.021
-aosp_version_real=OPM1.171019.021
-aosp_tag=android-8.1.0_r15
+kernel_suffix=oreo-m2
+branch=oreo-m2-release
+aosp_version=OPM2.171019.029
+aosp_version_real=OPM2.171019.029
+aosp_tag=android-8.1.0_r20
 
 aosp_forks=(
   device_common
