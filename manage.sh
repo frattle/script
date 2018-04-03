@@ -160,7 +160,7 @@ for kernel in ${!kernels[@]}; do
     if [[ $kernel == linaro_hikey ]]; then
       cd .. || exit 1
       continue
-    elif [[ $kernel == huawei_angler || $kernel == lge_bullhead ]]; then
+    elif [[ $kernel == huawei_angler ]]; then
       suffix=oreo-m3
     fi
     if [[ $kernel == google_marlin || $kernel == google_wahoo ]]; then
