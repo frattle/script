@@ -81,7 +81,6 @@ copperhead=(
   branding
   chromium_patches
   platform_external_chromium
-  platform_external_chromium-webview
   platform_external_Etar-Calendar
   platform_external_F-Droid
   platform_external_offline-calendar
