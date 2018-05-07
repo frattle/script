@@ -12,10 +12,10 @@ elif [[ $# -ne 0 ]]; then
 fi
 
 kernel_suffix=oreo-m2
-branch=oreo-m2-release
-aosp_version=OPM2.171019.029
-aosp_version_real=OPM2.171019.029
-aosp_tag=android-8.1.0_r20
+branch=oreo-m2-s2-release
+aosp_version=OPM2.171019.029.B1
+aosp_version_real=OPM2.171019.029.B1
+aosp_tag=android-8.1.0_r26
 
 aosp_forks=(
   device_common
