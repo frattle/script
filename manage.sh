@@ -11,7 +11,6 @@ elif [[ $# -ne 0 ]]; then
   exit 1
 fi
 
-kernel_suffix=oreo-m2
 branch=oreo-m2-s2-release
 aosp_version=OPM2.171019.029.B1
 aosp_version_real=OPM2.171019.029.B1
@@ -69,11 +68,11 @@ aosp_forks=(
 )
 
 declare -A kernels=(
-  [google_marlin]=android-msm-marlin-3.18
-  [google_wahoo]=android-msm-wahoo-4.4
-  [huawei_angler]=android-msm-angler-3.10
-  [lge_bullhead]=android-msm-bullhead-3.10
-  [linaro_hikey]=hikey-4.9
+  [google_marlin]=android-8.1.0_r0.54 # May
+  [google_wahoo]=android-8.1.0_r0.51 # May
+  [huawei_angler]=android-8.1.0_r0.41 # April
+  [lge_bullhead]=android-8.1.0_r0.53 # May
+  [linaro_hikey]=dc721a4ac71d
 )
 
 copperhead=(
@@ -155,17 +154,15 @@ for kernel in ${!kernels[@]}; do
     git push origin $aosp_version.$build_number || exit 1
   else
     git fetch upstream --tags || exit 1
-    suffix=$kernel_suffix
-    if [[ $kernel == linaro_hikey ]]; then
+    kernel_tag=${kernels[$kernel]}
+    if [[ -z $kernel_tag ]]; then
       cd .. || exit 1
       continue
-    elif [[ $kernel == huawei_angler ]]; then
-      suffix=oreo-m3
     fi
     if [[ $kernel == google_marlin || $kernel == google_wahoo ]]; then
       git checkout $branch-stable-base || exit 1
     fi
-    git pull --rebase upstream ${kernels[$kernel]}-$suffix || exit 1
+    git rebase $kernel_tag || exit 1
     git push -f || exit 1
     if [[ $kernel == google_marlin || $kernel == google_wahoo ]]; then
       git checkout $branch || exit 1
