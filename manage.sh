@@ -70,7 +70,7 @@ aosp_forks=(
 declare -A kernels=(
   [google_marlin]=android-8.1.0_r0.54 # May
   [google_wahoo]=android-8.1.0_r0.51 # May
-  [huawei_angler]=android-8.1.0_r0.41 # April
+  [huawei_angler]=android-8.1.0_r0.50 # May
   [lge_bullhead]=android-8.1.0_r0.53 # May
   [linaro_hikey]=dc721a4ac71d
 )
