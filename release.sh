@@ -66,7 +66,8 @@ if [[ $DEVICE != hikey* ]]; then
     $OUT/$DEVICE-ota_update-$BUILD.zip || exit 1
 fi
 
-build/tools/releasetools/img_from_target_files -n $OUT/$TARGET_FILES \
+sed -i 's/zipfile\.ZIP_DEFLATED/zipfile\.ZIP_STORED/' build/tools/releasetools/img_from_target_files.py
+build/tools/releasetools/img_from_target_files $OUT/$TARGET_FILES \
   $OUT/$DEVICE-img-$BUILD.zip || exit 1
 
 cd $OUT || exit 1
@@ -74,6 +75,9 @@ cd $OUT || exit 1
 if [[ $DEVICE == hikey* ]]; then
   source ../../device/linaro/hikey/factory-images/generate-factory-images-$DEVICE.sh
 else
+  sed -i 's/zip -r/tar cvf/' ../../device/common/generate-factory-images-common.sh
+  sed -i 's/factory\.zip/factory\.tar/' ../../device/common/generate-factory-images-common.sh
+  sed -i '/^mv / d' ../../device/common/generate-factory-images-common.sh
   source ../../device/common/generate-factory-images-common.sh
 fi
 
